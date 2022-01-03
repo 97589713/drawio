@@ -11397,6 +11397,9 @@
 
 		if (data != null && data.length > 0)
 		{
+			//sai
+			fn();
+			/*
 			if (currentFile == null || (!currentFile.isModified() &&
 				(mxClient.IS_CHROMEAPP || EditorUi.isElectronApp || fileHandle != null)))
 			{
@@ -11428,7 +11431,7 @@
 						fn();
 					}
 				}));
-			}
+			}*/
 		}
 		else
 		{

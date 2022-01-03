@@ -1,0 +1,3 @@
+[submodule "src/main/webapp/mxgraph2"]
+	path = src/main/webapp/mxgraph2
+	url = https://github.com/97589713/mxgraph.git

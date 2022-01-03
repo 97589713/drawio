@@ -640,7 +640,7 @@ App.main = function(callback, createUi)
 			var scripts = document.getElementsByTagName('script');
 			
 			// Checks bootstrap script
-			if (scripts != null && scripts.length > 0)
+			/*if (scripts != null && scripts.length > 0)
 			{
 				var content = mxUtils.getTextContent(scripts[0]);
 				
@@ -661,7 +661,7 @@ App.main = function(callback, createUi)
 					console.log('Change main script MD5 in the previous line:', CryptoJS.MD5(content).toString());
 					alert('[Dev] Main script change requires update of CSP');
 				}
-			}
+			}*/
 		}
 
 		try
@@ -915,7 +915,7 @@ App.main = function(callback, createUi)
 			}
 			
 			// Main
-			function realMain()
+			async function realMain()
 			{
 				var ui = (createUi != null) ? createUi() : new App(new Editor(
 						urlParams['chrome'] == '0' || uiTheme == 'min',
@@ -1002,6 +1002,13 @@ App.main = function(callback, createUi)
 						EditorUi.debug('Export:', EXPORT_URL);
 					}
 				}
+
+					//sai
+				/*if(chrome.webview.hostObjects){
+					var articleContent = await chrome.webview.hostObjects.csharp.GetContent();
+					ui.openLocalFile(articleContent);
+					return;
+				}*/
 			};
 			
 			if (urlParams['dev'] == '1' || EditorUi.isElectronApp) //TODO check if we can remove these scripts loading from index.html
