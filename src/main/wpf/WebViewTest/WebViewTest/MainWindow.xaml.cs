@@ -33,8 +33,8 @@ namespace WebViewTest
 		{
 			await webView.EnsureCoreWebView2Async(await CommonConstant.GetWebView2EnvironmentAsync());
 			webView.CoreWebView2.AddHostObjectToScript("csharp", new CallbackObjectForJs());
-			webView.Source = new Uri(@"file://D:\github\drawio\src\main\webapp\index.html?local=1&splash=0&math=0");
-			//webView.Source = new Uri(@"file://D:\github\drawio\src\main\webapp\index.html?local=1&splash=0&dev=1&math=0");
+			//webView.Source = new Uri(@"file://D:\github\drawio\src\main\webapp\index.html?local=1&splash=0&math=0");
+			webView.Source = new Uri(@"file://D:\github\drawio\src\main\webapp\index.html?local=1&splash=0&dev=1&math=0");
 			//webView.Source = new Uri(@"file://D:\github\drawio\src\main\webapp\index.html?math=0");
 
 			//webView.Source = new Uri(@"file:///D:/git/vctool/client/extjs670/resources/drawio-8.3.5/src/main/webapp/index.html?dev=1");

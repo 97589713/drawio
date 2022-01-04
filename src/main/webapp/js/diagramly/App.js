@@ -177,6 +177,7 @@ App = function(editor, container, lightbox)
 		}), 5000); //5 sec timeout
 	}
 
+	window.ui = this;
 	this.load();
 };
 
@@ -378,6 +379,22 @@ App.loadScripts = function(scripts, onload)
 			}
 		});
 	}
+};
+
+App.requestAsync = function (controller, action, ...args) {
+    return new Promise((resolve, reject) => {
+        var jsonArray = JSON.stringify(args);
+        chrome.webview.hostObjects.csharp.Js_Execute(controller, action, jsonArray, function (successText) {
+            var jo = JSON.parse(successText);
+            resolve(jo);
+        }, function (failureText) {
+            alert('方法调用错误：' + failureText);
+            resolve({
+                status: -999,
+                info: '内部错误'
+            });
+        });
+    });
 };
 
 /**
@@ -1004,11 +1021,11 @@ App.main = function(callback, createUi)
 				}
 
 					//sai
-				/*if(chrome.webview.hostObjects){
-					var articleContent = await chrome.webview.hostObjects.csharp.GetContent();
+				if(chrome.webview.hostObjects){
+					var articleContent = await App.requestAsync('Note', 'GetContent'); //chrome.webview.hostObjects.csharp.GetContent();
 					ui.openLocalFile(articleContent);
 					return;
-				}*/
+				}
 			};
 			
 			if (urlParams['dev'] == '1' || EditorUi.isElectronApp) //TODO check if we can remove these scripts loading from index.html
@@ -4413,6 +4430,8 @@ App.prototype.saveLibrary = function(name, images, file, mode, noSpin, noReload,
  */
 App.prototype.saveFile = function(forceDialog, success)
 {
+	this.saveAsync();
+	return;
 	var file = this.getCurrentFile();
 	
 	if (file != null)

@@ -5586,6 +5586,86 @@
 		fn(value, src);
 	};
 
+	EditorUi.prototype.saveAsync = function () {
+		var me = this;
+		return new Promise(function (resolve, reject) {
+			me.editor.setStatus('');
+			try {
+				me.getImageDataUriAsync().then(function (imageData) {
+					if (!imageData)
+						App.requestAsync('Note', 'Article_Save', '', '');
+					else {
+						me.getHtmlDataAsync().then(function (htmlData) {
+							App.requestAsync('Note', 'Article_Save', imageData, htmlData);
+							resolve();
+						});
+					}
+				});
+			} catch (e) {
+				App.requestAsync('Note', 'Article_Save', '', '');
+				resolve();
+			}
+		});
+	};
+
+	//sai
+	EditorUi.prototype.getImageDataUriAsync = function (format) {
+		var me = this;
+		return new Promise(function (resolve, reject) {
+			format = (format != null) ? format : 'png'
+
+			if (me.spinner.spin(document.body, mxResources.get('exporting'))) {
+				// Caches images
+				if (me.thumbImageCache == null) {
+					me.thumbImageCache = new Object();
+				}
+
+				try {
+					me.exportToCanvas(mxUtils.bind(me, function (canvas) {
+						me.spinner.stop();
+
+
+						try {
+							var imgdata = me.createImageDataUri(canvas, null, format);
+							resolve(imgdata);
+							//this.saveCanvas(canvas, null, format);
+
+						}
+						catch (e) {
+							resolve('');
+							//reject(e);
+							//this.handleError(e);
+						}
+					}), null, me.thumbImageCache, null, mxUtils.bind(me, function (e) {
+						me.spinner.stop();
+						me.handleError(e);
+					}), null, true, 1, true,
+						false, null, null, '0', true);
+				}
+				catch (e) {
+					me.spinner.stop();
+					me.handleError(e);
+				}
+			}
+		});
+
+	};
+
+	EditorUi.prototype.getHtmlDataAsync = function () {
+		var me = this;
+		return new Promise(function (resolve, reject) {
+			me.createHtml(null, true, "100%", "auto", "#0000ff",
+				true, true, true, false, false, "_blank", mxUtils.bind(me, function (html, scriptTag) {
+					var basename = this.getBaseFilename();
+					var result = '<!--[if IE]><meta http-equiv="X-UA-Compatible" content="IE=5,IE=9" ><![endif]-->\n' +
+						'<!DOCTYPE html>\n<html>\n<head>\n<title>' + mxUtils.htmlEntities(basename) + '</title>\n' +
+						'<meta charset="utf-8"/>\n</head>\n<body>' + html + '\n' + scriptTag + '\n</body>\n</html>';
+					resolve(result);
+					//editorUi.saveData(basename + '.html', 'html', result, 'text/html');
+				}));
+		});
+	};
+
 	/**
 	 * 
 	 */
