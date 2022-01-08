@@ -5579,7 +5579,7 @@
 		var fetchParam = (publicUrl != null) ? '&fetch=' + encodeURIComponent(publicUrl) : '';
 		var s2 = (fetchParam.length > 0) ? (((urlParams['dev'] == '1') ?
 			'https://test.draw.io/embed2.js?dev=1' : EditorUi.lightboxHost + '/embed2.js?')) + fetchParam :
-			(((urlParams['dev'] == '1') ? 'https://test.draw.io/js/viewer-static.min.js' :
+			(((urlParams['dev'] == '1') ? './viewer-static.min.js' :
 			window.DRAWIO_VIEWER_URL ? window.DRAWIO_VIEWER_URL : EditorUi.lightboxHost + '/js/viewer-static.min.js'));
 		var src = '<script type="text/javascript" src="' + s2 + '"></script>';
 		
@@ -5593,16 +5593,16 @@
 			try {
 				me.getImageDataUriAsync().then(function (imageData) {
 					if (!imageData)
-						App.requestAsync('Note', 'Article_Save', '', '');
+						App.requestAsync('Note', 'DrawioSave', '', '');
 					else {
 						me.getHtmlDataAsync().then(function (htmlData) {
-							App.requestAsync('Note', 'Article_Save', imageData, htmlData);
+							App.requestAsync('Note', 'DrawioSave', imageData, htmlData);
 							resolve();
 						});
 					}
 				});
 			} catch (e) {
-				App.requestAsync('Note', 'Article_Save', '', '');
+				App.requestAsync('Note', 'DrawioSave', '', '');
 				resolve();
 			}
 		});

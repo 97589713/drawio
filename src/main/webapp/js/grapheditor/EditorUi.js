@@ -3372,27 +3372,29 @@ EditorUi.prototype.isSelectionAllowed = function(evt)
  */
 EditorUi.prototype.addBeforeUnloadListener = function()
 {
+	//sai
 	// Installs dialog if browser window is closed without saving
 	// This must be disabled during save and image export
-	window.onbeforeunload = mxUtils.bind(this, function()
-	{
-		if (!this.editor.isChromelessView())
-		{
-			return this.onBeforeUnload();
-		}
-	});
+	// window.onbeforeunload = mxUtils.bind(this, function()
+	// {
+	// 	if (!this.editor.isChromelessView())
+	// 	{
+	// 		return this.onBeforeUnload();
+	// 	}
+	// });
 };
 
 /**
  * Sets the onbeforeunload for the application
  */
-EditorUi.prototype.onBeforeUnload = function()
-{
-	if (this.editor.modified)
-	{
-		return mxResources.get('allChangesLost');
-	}
-};
+//sai
+// EditorUi.prototype.onBeforeUnload = function()
+// {
+// 	if (this.editor.modified)
+// 	{
+// 		return mxResources.get('allChangesLost');
+// 	}
+// };
 
 /**
  * Opens the current diagram via the window.opener if one exists.

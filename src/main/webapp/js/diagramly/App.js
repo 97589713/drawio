@@ -826,7 +826,7 @@ App.main = function(callback, createUi)
 	 */
 	if (urlParams['math'] != '0')
 	{
-		Editor.initMath();
+		//Editor.initMath();
 	}
 
 	function doLoad(bundle)
@@ -1022,8 +1022,11 @@ App.main = function(callback, createUi)
 
 					//sai
 				if(chrome.webview.hostObjects){
-					var articleContent = await App.requestAsync('Note', 'GetContent'); //chrome.webview.hostObjects.csharp.GetContent();
-					ui.openLocalFile(articleContent);
+					var result = await App.requestAsync('Note', 'GetContent'); 
+					if(result.data)
+						ui.openLocalFile(result.data);
+
+						App.requestAsync('Note', 'LoadComplete');
 					return;
 				}
 			};
@@ -2264,36 +2267,36 @@ App.prototype.resetRecent = function(entry)
 /**
  * Sets the onbeforeunload for the application
  */
-App.prototype.onBeforeUnload = function()
-{
-	if (urlParams['embed'] == '1' && this.editor.modified)
-	{
-		return mxResources.get('allChangesLost');
-	}
-	else
-	{
-		var file = this.getCurrentFile();
+// App.prototype.onBeforeUnload = function()
+// {
+// 	if (urlParams['embed'] == '1' && this.editor.modified)
+// 	{
+// 		return mxResources.get('allChangesLost');
+// 	}
+// 	else
+// 	{
+// 		var file = this.getCurrentFile();
 		
-		if (file != null)
-		{
-			// KNOWN: Message is ignored by most browsers
-			if (file.constructor == LocalFile && file.getHash() == '' && !file.isModified() &&
-				urlParams['nowarn'] != '1' && !this.isDiagramEmpty() && urlParams['url'] == null &&
-				!this.editor.isChromelessView() && file.fileHandle == null)
-			{
-				return mxResources.get('ensureDataSaved');
-			}
-			else if (file.isModified())
-			{
-				return mxResources.get('allChangesLost');
-			}
-			else
-			{
-				file.close(true);
-			}
-		}
-	}
-};
+// 		if (file != null)
+// 		{
+// 			// KNOWN: Message is ignored by most browsers
+// 			if (file.constructor == LocalFile && file.getHash() == '' && !file.isModified() &&
+// 				urlParams['nowarn'] != '1' && !this.isDiagramEmpty() && urlParams['url'] == null &&
+// 				!this.editor.isChromelessView() && file.fileHandle == null)
+// 			{
+// 				return mxResources.get('ensureDataSaved');
+// 			}
+// 			else if (file.isModified())
+// 			{
+// 				return mxResources.get('allChangesLost');
+// 			}
+// 			else
+// 			{
+// 				file.close(true);
+// 			}
+// 		}
+// 	}
+// };
 
 /**
  * Translates this point by the given vector.
